@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.use('/api', require('./routes/api'));
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect("mongodb://localhost:27017/college_system", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
