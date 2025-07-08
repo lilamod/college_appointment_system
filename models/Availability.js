@@ -5,9 +5,7 @@ const availabilitySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User' 
 },
-  time: {
-    type: String,
-  }
+  time: [String]
 });
 
 module.exports = mongoose.model('Availability', availabilitySchema);
