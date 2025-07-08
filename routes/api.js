@@ -43,14 +43,19 @@ router.get('/availability/:professorId', auth(['student']), async (req, res) => 
 
 router.post('/appointments', auth(['student']), async (req, res) => {
   const { professorId, time } = req.body;
-  const existing = await Appointment.findOne({ professor: professorId, time });
-  if (existing) return res.status(409).send("Time slot already booked.");
-  const appointment = await Appointment.create({
-    student: req.user.id,
-    professor: professorId,
-    time
-  });
-  res.json(appointment);
+  const availability = await Availability.findOne({professor: professorId, time: {$in: time}})
+  if(availability){
+    const existing = await Appointment.findOne({ professor: professorId, time });
+    if (existing) return res.status(409).send("Time slot already booked.");
+    const appointment = await Appointment.create({
+      student: req.user.id,
+      professor: professorId,
+      time
+    });
+    res.json(appointment);
+  }else{
+    res.json("Professor is not available")
+  }
 });
 
 router.delete('/appointments/:id', auth(['professor']), async (req, res) => {
